@@ -8,9 +8,11 @@ from RMQ_connection import RMQConnection
 
 def main():
     app = QApplication(sys.argv)
+
     connection = RMQConnection()
-    main_window = CollaborativeEditing(connection)
-    main_window.show()
+    window = CollaborativeEditing(connection)
+
+    window.show()
 
     app.exec()
 

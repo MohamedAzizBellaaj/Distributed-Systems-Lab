@@ -1,38 +1,23 @@
-from collaborative_editing_ui import Ui_CollaborativeEditing
 from PySide6 import QtCore
-from PySide6.QtWidgets import QWidget
-from RMQConnection import RMQConnection
+from PySide6.QtWidgets import QMainWindow
+
+from collaborative_editing_ui_final import Ui_CollaborativeEditingFinal
+from RMQ_connection import RMQConnection
 
 
-class CollaborativeEditing(QWidget, Ui_CollaborativeEditing):
-    update_value = QtCore.Signal(str)
+class CollaborativeEditing(Ui_CollaborativeEditingFinal):
+    update_text_area = QtCore.Signal()
 
     def __init__(self, connection: RMQConnection):
-        super().__init__()
-        self.section1 = ""
-        self.section2 = ""
-        self.setupUi(self)
-        self.setWindowTitle("Collaborative Editing")
-        self.connection = connection
-        self.connection.consumer.declare_queue(queue="section1")
-        self.connection.consumer.declare_queue(queue="section2")
-        self.connection.consumer.listen_queue(queue="section1", callback=self.callback_section_1)
-        self.connection.consumer.listen_queue(queue="section2", callback=self.callback_section_2)
+        super().__init__(connection)
+        self.main_window = QMainWindow()
+        self.setupUi(self.main_window)
+        self.section1_edit_area.textChanged.connect(self.update_text_area_slot)
+        self.section2_edit_area.textChanged.connect(self.update_text_area_slot)
         self.connection.start_consume()
-    def callback_section_1(self, ch, method, properties, body):
-        self.section1 = str(body, "utf-8")
-        self.text_area.setText("Updated 1")
-        self.test()
 
-    def callback_section_2(self, ch, method, properties, body):
-        self.section2 = str(body, "utf-8")
-        self.text_area.setText("Updated 2")
-        self.test()
+    def show(self):
+        self.main_window.show()
 
-    def test(self):
-        print(
-            f"""
-              Section 1 : {self.section1}
-              Section 2 : {self.section2}
-              """
-        )
+    def update_text_area_slot(self):
+        self.whole_text.setText(f"{self.section1_edit_area.toPlainText()}\n{self.section2_edit_area.toPlainText()}")
