@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pika
 
 section1 = ""
@@ -24,9 +25,11 @@ def main():
     with pika.BlockingConnection(pika.ConnectionParameters("localhost")) as connection:
         channel = connection.channel()
         channel.basic_consume(
-            queue="section1", on_message_callback=callback_section_1, auto_ack=True)
+            queue="section1", on_message_callback=callback_section_1, auto_ack=True
+        )
         channel.basic_consume(
-            queue="section2", on_message_callback=callback_section_2, auto_ack=True)
+            queue="section2", on_message_callback=callback_section_2, auto_ack=True
+        )
         channel.start_consuming()
 
 
