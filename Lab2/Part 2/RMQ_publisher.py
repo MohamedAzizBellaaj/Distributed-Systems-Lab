@@ -27,6 +27,8 @@ class RMQPublisher:
         return self.channel.exchange_declare(
             exchange=exchange, exchange_type=exchange_type
         )
+    def queue_delete(self, queue):
+        self.channel.queue_delete(queue=queue)
 
     def bind_queue_exchange(self, queue, exchange):
         return self.channel.queue_bind(exchange=exchange, queue=queue)

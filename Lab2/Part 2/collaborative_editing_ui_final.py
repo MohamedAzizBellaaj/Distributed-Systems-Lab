@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMenuBar,
-    QPushButton,
     QStatusBar,
     QTextEdit,
     QVBoxLayout,
@@ -46,11 +45,6 @@ class Ui_CollaborativeEditingFinal(object):
 
         self.verticalLayout.addWidget(self.section1_edit_area)
 
-        self.section1_button = QPushButton(self.widget)
-        self.section1_button.setObjectName("section1_button")
-
-        self.verticalLayout.addWidget(self.section1_button)
-
         self.horizontalLayout.addLayout(self.verticalLayout)
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
@@ -68,11 +62,6 @@ class Ui_CollaborativeEditingFinal(object):
         self.section2_edit_area.setObjectName("section2_edit_area")
 
         self.verticalLayout_2.addWidget(self.section2_edit_area)
-
-        self.section2_button = QPushButton(self.widget)
-        self.section2_button.setObjectName("section2_button")
-
-        self.verticalLayout_2.addWidget(self.section2_button)
 
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
 
@@ -105,12 +94,6 @@ class Ui_CollaborativeEditingFinal(object):
         self.section1_label.setText(
             QCoreApplication.translate("CollaborativeEditing", "Section 1:", None)
         )
-        self.section1_button.setText(
-            QCoreApplication.translate("CollaborativeEditing", "Done", None)
-        )
         self.section2_label.setText(
             QCoreApplication.translate("CollaborativeEditing", "Section 2:", None)
-        )
-        self.section2_button.setText(
-            QCoreApplication.translate("CollaborativeEditing", "Done", None)
         )
