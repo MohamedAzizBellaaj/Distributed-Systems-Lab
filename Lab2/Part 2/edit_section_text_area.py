@@ -38,23 +38,23 @@ class EditSectionTextArea(QtWidgets.QTextEdit):
         self.connection.consumer.listen_queue(self.update_queue, self.on_edit_request)
 
     def on_edit_request(self, ch, method, properties, body):
+        message_in_queue = json.loads(body)
         delivery_tag = method.delivery_tag
-        payload = json.loads(body)
-        if "index" not in payload or "message" not in payload:
-            if payload["user"] != self.connection.client_id:
-                print("It is", {payload["user"]}, "turn to edit", {self.identifier})
+        if "index" not in message_in_queue or "message" not in message_in_queue:
+            if message_in_queue["user"] != self.connection.client_id:
+                print("It is", {message_in_queue["user"]}, "turn to edit", {self.identifier})
             else:
                 print(delivery_tag)
             return
-        elif payload["index"] != self.index:
+        elif message_in_queue["index"] != self.index:
             return
-        self.update_value.emit(payload["message"])
+        self.update_value.emit(message_in_queue["message"])
         self.connection.consumer.send_ack(delivery_tag)
 
     def edit_request_lock(self):
-        payload = {"user": self.connection.client_id}
+        message_in_queue = {"user": self.connection.client_id}
         self.connection.publisher.send_message(
-            queue=self.identifier, message=json.dumps(payload)
+            queue=self.identifier, message=json.dumps(message_in_queue)
         )
 
     def focusInEvent(self, e):
@@ -64,8 +64,8 @@ class EditSectionTextArea(QtWidgets.QTextEdit):
 
     def focusOutEvent(self, e):
         super(EditSectionTextArea, self).focusOutEvent(e)
-        payload = {"message": self.toPlainText(), "index": self.index}
+        message_in_queue = {"message": self.toPlainText(), "index": self.index}
         self.connection.publisher.send_message(
-            exchange=self.exchange, message=json.dumps(payload)
+            exchange=self.exchange, message=json.dumps(message_in_queue)
         )
         print(f"{self.connection.client_id} in focus out of {self.identifier}")

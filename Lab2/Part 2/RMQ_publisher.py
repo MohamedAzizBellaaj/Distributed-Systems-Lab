@@ -15,7 +15,7 @@ class RMQPublisher:
         )
 
     def declare_bind_queue_exchange(self, queue, exchange):
-        self.queue_declare(queue=queue)
+        self.queue_declare(queue=queue, durable=True)
         self.exchange_declare(exchange=exchange, exchange_type=ExchangeType.fanout)
         self.bind_queue_exchange(exchange=exchange, queue=queue)
 
